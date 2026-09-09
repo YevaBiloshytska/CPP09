@@ -3,7 +3,7 @@
 
 # include <iostream>
 # include <fstream>
-
+# include <string>
 class BitcoinExchange
 {
 public:
@@ -12,11 +12,13 @@ public:
     BitcoinExchange operator=(const BitcoinExchange &rhs);
     ~BitcoinExchange();
 
-private:
-    std::ifstream _file;
-
+    void checkFirstLine();
+    void readFile(const char *input);
+    void checkDate();
     
-}
+private:
+    std::string _file;
+};
 
 
 #endif

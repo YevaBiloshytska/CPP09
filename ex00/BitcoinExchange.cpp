@@ -1,16 +1,13 @@
 #include "BitcoinExchange.hpp"
-
+#include <exception>
 BitcoinExchange::BitcoinExchange(){}
 
-BitcoinExchange::BitcoinExchange(const BitcoinExchange &obj)
+BitcoinExchange::BitcoinExchange(const BitcoinExchange &obj) //rewrite
 {
-    if (this != obj)
-        *this = obj;
-
-    return *this;
+    *this = obj;
 }
 
-BitcoinExchange BitcoinExchange::operator=(const BitcoinExchange &rhs)
+BitcoinExchange BitcoinExchange::operator=(const BitcoinExchange &rhs)//rewrite 
 {
     if (this != &rhs)
         this->_file = rhs._file;
@@ -20,14 +17,68 @@ BitcoinExchange BitcoinExchange::operator=(const BitcoinExchange &rhs)
 
 BitcoinExchange::~BitcoinExchange(){}
 
+void BitcoinExchange::checkFirstLine()
+{
+    std::string firstLine = "date | value";
+
+    if (_file == firstLine)
+        std::cout << "YES!\n";
+    else
+        throw std::runtime_error("ERROR: File's format is invalid\n");
+}
+
+static bool isAllnum(std::string str)
+{
+    while(*str)
+    {
+        if (*str.isdigit())
+            str++;
+        else
+            return false;
+        // else
+        //     throw std::time_error("ERROR: inappropriate symbol");
+    }
+    return true;
+}
+
+static void devideDate(std::string date, std::string month, std::string day)
+{
+
+}
+
+void BitcoinExchange::checkDate()
+{
+    
+
+}
+
+void BitcoinExchange::readFile(const char *ptr)
+{
+    std::ifstream input(ptr);
+    bool firstLine = true;
+    while (getline(input, _file))
+    {
+        if(firstLine)
+        {
+            checkFirstLine();
+            firstLine = false;
+        }
+
+
+    }
+    input.close();
+}
 
 
 
-/*
-1.сделать парсинг, то есть проверку на валидность данных, которые мы получаем из файла.
-2.сделать проверку на валидность даты, то есть проверку на то, что дата в файле соответствует формату YYYY-MM-DD.
-3.сделать проверку на валидность значения, то есть проверку на то, что значение в файле является числом и находится в допустимом диапазоне.
-4.сделать проверку на наличие файла, то есть проверку на то, что файл существует и может быть открыт для чтения.
-5.сделать обработку ошибок, то есть вывод сообщений об ошибках в случае возникновения проблем с файлом или данными.
-6.сделать вывод результатов, то есть вывод информации о валидных данных из файла в консоль или в другой файл.
-*/
+//После того, как напишу код через вынес сначала в string текст, 
+//а потом проверки строк, можно будет эту валидацию сделать сразу после открытия файла.
+//нет, потому что нам нужно переписывать файл, который мы будем выводить, поэтому
+//лучше его хранить в стоке.
+
+
+
+
+
+
+
