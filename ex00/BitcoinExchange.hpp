@@ -12,9 +12,11 @@ public:
     BitcoinExchange operator=(const BitcoinExchange &rhs);
     ~BitcoinExchange();
 
-    void checkFirstLine();
     void readFile(const char *input);
+    void checkFirstLine();
+    void checkLine();
     void checkDate();
+    void checkValue();
     
 private:
     std::string _file;
