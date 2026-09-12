@@ -68,20 +68,13 @@ void BitcoinExchange::checkDate()
     std::string dayStr = _file.substr(posMonthEnd + 1, 2);
 
     if (!(isAllnum(yearStr) && isAllnum(monthStr) && isAllnum(dayStr)))
-        throw std::runtime_error("Error: bad input => ");
+        throw std::runtime_error("Error: bad input (ivalid symbols instead of numbers) => ");
 
     int year = std::atoi(yearStr.c_str());
     int month = std::atoi(monthStr.c_str());
     int day = std::atoi(dayStr.c_str());
 
-    try
-    {
-        checkGregorianCalender(year, month, day);
-    }
-    catch(std::exception &e)
-    {
-        std::cout << e.what();
-    }
+    checkGregorianCalender(year, month, day);
 }
 
 
@@ -90,21 +83,27 @@ void BitcoinExchange::checkValue()
 
     std::string value = _file.substr(13, _file.size() - 13);
 
-    float v = std::atof(value.c_str());
+    double v = std::atof(value.c_str());
     if (v < 0)
         throw std::runtime_error("Error: not a positive number.\n");
     if (v > 1000)
         throw std::runtime_error("Error: too large a number.\n");
-   
+
+    if (v < 0 || v > 1000)
+    {
+        outputCounter = 0;
+        return;  
+    }
+
+    val = v;
 }
 
 void BitcoinExchange::checkLine()
 {
     checkDate();
-    std::cout << _file << "\n";
     std::string::size_type between = _file.find(" | ");
     if (between != 10)
-        throw std::runtime_error("Error: invalid input => ");
+        throw std::runtime_error("Error: invalid input (Usage: \" | \" between date and value) => ");
     checkValue();
 }
 
@@ -115,6 +114,7 @@ void BitcoinExchange::readFile(const char *ptr)
     checkFirstLine();
     while (getline(input, _file))
     {
+        outputCounter = 1;
         try
         {
             checkLine();
@@ -122,10 +122,19 @@ void BitcoinExchange::readFile(const char *ptr)
         catch(std::exception &e)
         {
             std::cout << e.what();
-        } 
+        }
+        date = _file.substr(0, 10);
+        if (outputCounter)
+            std::cout << _file << "\n";
     }
     input.close();
 }
+
+void createContainer()
+{
+    std::ostream
+}
+
 
 
 

@@ -4,6 +4,8 @@
 # include <iostream>
 # include <fstream>
 # include <string>
+# include <map>
+
 class BitcoinExchange
 {
 public:
@@ -17,9 +19,15 @@ public:
     void checkLine();
     void checkDate();
     void checkValue();
+
+    void createContainer();
     
 private:
     std::string _file;
+    int outputCounter;
+    std::string date;
+    double val;
+    std::map<std::string, double>;
 };
 
 
